@@ -1,0 +1,9 @@
+.idea
+.vscode
+.code
+.DS_Store
+
+main
+awesomeProject
+*.out
+
