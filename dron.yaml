@@ -1,0 +1,10 @@
+commands:
+  - name: up_www
+    args:
+      arg0: WiRight
+      arg1: $input
+      arg2: env(APP_ENV)
+    commands:
+      - echo "hello $arg0"
+      #      - echo "world with $arg1"
+      - echo "arg2 -> $arg2"
