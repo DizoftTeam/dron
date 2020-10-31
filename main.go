@@ -13,21 +13,23 @@ import (
 )
 
 var (
-	debugMode = true
+	debugMode = true // Режим отладки - вывод сообщений
+	argSym    = "$"  // Символ обозначающий начало аргумента
 )
 
 const (
-	input  = "$input"
-	env    = "env"
-	argSym = "$"
+	input = "input" // Тип аргумента - получение данных от пользователя TODO: пока не готово
+	env   = "env"   // Тип аргумента - получить данные из окружения TODO: пока не готово
 )
 
+// Структура 1 команды
 type iCommand struct {
 	Name     string            `yaml:"name"`
 	Args     map[string]string `yaml:"args"`
 	Commands []string          `yaml:"commands"`
 }
 
+// Стркутура dron.yaml файла
 type config struct {
 	Commands []iCommand `yaml:"commands"`
 }
@@ -50,7 +52,8 @@ func checkHasArgPointer(command string) int {
 	return -1
 }
 
-func parseArgs(args map[string]interface{}, command string) string {
+// Парсинг аргументов
+func parseArgs(args map[string]string, command string) string {
 	result := command
 
 	for argPos := checkHasArgPointer(result); argPos > -1; argPos = checkHasArgPointer(result) {
@@ -69,10 +72,10 @@ func parseArgs(args map[string]interface{}, command string) string {
 			}
 		}
 
-		argName = strings.Trim(argName, "\n\t ")
+		argName = strings.Trim(argName, "\n\t'\" ")
 
-		if argName != "" && args[argName] != nil && pos != -1 {
-			argParam := args[argName].(string)
+		if argName != "" && args[argName] != "" && pos != -1 {
+			argParam := args[argName]
 
 			debug("ARG_NAME", argName, argParam)
 
@@ -96,15 +99,6 @@ func parseArgs(args map[string]interface{}, command string) string {
 }
 
 func main() {
-	parsed := parseArgs(map[string]interface{}{
-		"world": "WiRight",
-		"padla": "Loh",
-	}, "hello $world suka $padla")
-
-	println("\nPARSED:", parsed)
-
-	return
-
 	// Параметры командной строки
 	isDebug := flag.Bool("debug", false, "Print debug info")
 
@@ -118,7 +112,13 @@ func main() {
 	data, err := ioutil.ReadFile("./dron.yaml")
 
 	if err != nil {
-		log.Fatal("File 'dron.yaml' can not be located in current folder")
+		data2, err2 := ioutil.ReadFile("./dron.yml")
+
+		if err2 != nil {
+			log.Fatal("File 'dron.yaml' or 'dron.yml' can not be located in current folder")
+		}
+
+		data = data2
 	}
 
 	if err := yaml.Unmarshal(data, &c); err != nil {
@@ -157,9 +157,13 @@ func main() {
 
 	for i, k := range command.Commands {
 		debug("Run [", i, "] command")
-		debug("--> ", k)
+		debug("-->", k)
 
-		cmd := exec.Command("bash", "-c", k)
+		parsed := parseArgs(command.Args, k)
+
+		debug("[parsed]", parsed)
+
+		cmd := exec.Command("bash", "-c", parsed)
 		cmd.Stdout = os.Stdout
 
 		if err := cmd.Run(); err != nil {
