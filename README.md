@@ -1,15 +1,15 @@
 # Dron
 
-Запускатор команд
+Small shell command executor 
 
-Вместо написания `bash` скриптов
+No more raw `bash` scripts!
 
-## Пример конфига
+## Example of config
 
-Файл `dron.yaml`
+File name `dron.yaml` or `dron.yml`
 
-> Все приведенные конфиги актуальны и рабочие.  
-> Файл примера - не актуальный и нужен только для разработки
+> All configs below is actual and work
+> Do not use example file in repository - this is only for development 
 
 ### v1.0.0 [31.10.2020]
 
@@ -36,9 +36,7 @@ commands:
       - echo "arg0 $arg0 with quotes on end $arg1"
 ```
 
-* Добавлена поддержка команды `$env`
-  * Если нет переменной окружения — будет вызвана ошибка
-* Исправлена ошибка — если после аргумента идут кавычки — они останутся, а не удалятся
-* Если есть файл `.env` — то он будет автоматически загружен
-
-> Если в примере нет чего-то — значит не реализовано
+* Add suppor for `$env` command
+  * If env param not find in system - error will be provided
+* Bug fix — double quotes not removing after argument name
+* If `.env` exist — it will be load automatically
