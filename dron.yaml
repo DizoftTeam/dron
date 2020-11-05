@@ -3,10 +3,9 @@ commands:
     args:
       arg0: WiRight
       arg1: $env(APP_ENV)
-    #      arg2: $input
+      arg2: $input
     commands:
-      - echo hello $arg0
-      - echo env_param_APP_ENV $arg1
-      - echo "arg0 $arg0 with quotes on end $arg1"
-      #      - echo "world with $arg1"
-#      - echo "arg2 -> $arg2"
+      #      - echo hello $arg0
+      #      - echo env_param_APP_ENV $arg1
+      #      - echo "arg0 $arg0 with quotes on end $arg1"
+      - echo "user inpus is $arg2"
