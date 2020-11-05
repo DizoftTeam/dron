@@ -5,7 +5,7 @@ commands:
       arg1: $env(APP_ENV)
       arg2: $input
     commands:
-      #      - echo hello $arg0
-      #      - echo env_param_APP_ENV $arg1
-      #      - echo "arg0 $arg0 with quotes on end $arg1"
-      - echo "user inpus is $arg2"
+      - echo hello $arg0
+      - echo env_param_APP_ENV $arg1
+      - echo "arg0 $arg0 with quotes on end $arg1"
+      - echo "user input is $arg2"

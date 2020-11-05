@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -14,35 +15,35 @@ import (
 )
 
 var (
-	debugMode = false // Режим отладки - вывод сообщений
-	argSym    = "$"   // Символ обозначающий начало аргумента
+	debugMode = false // Debug mode - print debug info
+	argSym    = "$"   // Start of argument TODO: maybe set in config
 )
 
 const (
-	input = "input" // Тип аргумента - получение данных от пользователя TODO: пока не готово
-	env   = "env"   // Тип аргумента - получить данные из окружения
+	input = "input" // Read info from user input TODO: пока не готово
+	env   = "env"   // Get param from env
 )
 
-// Структура 1 команды
+// Command structure
 type iCommand struct {
 	Name     string            `yaml:"name"`
 	Args     map[string]string `yaml:"args"`
 	Commands []string          `yaml:"commands"`
 }
 
-// Структура dron.yaml файла
+// Struct of dron.yaml file
 type config struct {
 	Commands []iCommand `yaml:"commands"`
 }
 
-// Печать отладочной информации
+// Print debug into
 func debug(data ...interface{}) {
 	if debugMode == true {
 		fmt.Println("[debug]", data)
 	}
 }
 
-// Проверка что в строке еще есть аргументы
+// Check that command has arguments
 func checkHasArgPointer(command string) int {
 	for i, v := range command {
 		if (string(v)) == argSym {
@@ -53,7 +54,7 @@ func checkHasArgPointer(command string) int {
 	return -1
 }
 
-// Парсинг и обработка ENV аргумента
+// Parsing and processing ENV argument
 func parseEnv(arg string) string {
 	// $env(ENV_NAME)
 	envName := arg[5 : len(arg)-1]
@@ -67,7 +68,18 @@ func parseEnv(arg string) string {
 	return envVal
 }
 
-// Парсинг аргументов
+// Parsing and processing INPUT argument
+func parseInput(argName string) string {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	fmt.Printf("[%s]> ", argName)
+
+	scanner.Scan()
+
+	return scanner.Text()
+}
+
+// Parse arguments
 func parseArgs(args map[string]string, command string) string {
 	result := command
 
@@ -114,6 +126,14 @@ func parseArgs(args map[string]string, command string) string {
 			}
 
 			// --- CHECK ENV
+
+			// CHECK INPUT ---
+
+			if strings.Contains(argParam, input) {
+				argParam = parseInput(argName)
+			}
+
+			// --- CHECK INPUT
 
 			result = fmt.Sprintf("%s%s%s", result[:argPos], argParam, end)
 		} else {
