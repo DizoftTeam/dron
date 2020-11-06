@@ -149,6 +149,7 @@ func parseArgs(args map[string]string, command string) string {
 func main() {
 	// Параметры командной строки
 	isDebug := flag.Bool("debug", false, "Print debug info")
+	showList := flag.Bool("list", false, "Print list commands")
 
 	flag.Parse()
 
@@ -173,7 +174,16 @@ func main() {
 		log.Fatal("Cant read config!\n", err)
 	}
 
-	// Проверка что есть первый аргумент
+	// Check that using -list argument
+	if *showList == true {
+		for _, v := range c.Commands {
+			fmt.Println(v.Name)
+		}
+
+		return
+	}
+
+	// Check the first argument exist
 	var fArg string
 
 	for _, v := range os.Args[1:] {

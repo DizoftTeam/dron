@@ -16,13 +16,19 @@ dron <command_name>
 > Development only!  
 > `dron -debug <command_name>`
 
+### List of available commands
+
+* `dron <command_name>` - Run specified command
+* `dron -debug <command_name>` - Run specified command with debug info
+* `dron -list` - Print list of commands name
+
 ## Installation
 
 ### ArchLinux
 
 You can install it from [AUR](https://aur.archlinux.org/packages/dron/)
 
-### Manual
+### Manual (Debian like. Redhat)
 
 Requirements:
 
@@ -91,3 +97,13 @@ commands:
     commands:
       - echo Hello $arg0
 ```
+
+## Known troubles
+
+* Each command will be executing from the current folder. Means that if you are using command like `cd` - the next
+  command will be running not from changed directory. To solve this problem you can
+  use `&&` (`cd /tmp && touch main.go`)
+
+## Contributing
+
+If you found some issue - please welcome to [issue create page](https://github.com/DizoftTeam/dron/issues/new)
