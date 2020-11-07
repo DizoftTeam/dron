@@ -14,14 +14,15 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const (
+	input   = "input" // Read info from user input
+	env     = "env"   // Get param from env
+	version = "1.2.2" // Application version
+)
+
 var (
 	debugMode = false // Debug mode - print debug info
 	argSym    = "$"   // Start of argument TODO: maybe set in config
-)
-
-const (
-	input = "input" // Read info from user input TODO: пока не готово
-	env   = "env"   // Get param from env
 )
 
 // Command structure
@@ -147,9 +148,10 @@ func parseArgs(args map[string]string, command string) string {
 }
 
 func main() {
-	// Параметры командной строки
+	// CLI arguments
 	isDebug := flag.Bool("debug", false, "Print debug info")
 	showList := flag.Bool("list", false, "Print list commands")
+	showVersion := flag.Bool("version", false, "Show version")
 
 	flag.Parse()
 
@@ -179,6 +181,13 @@ func main() {
 		for _, v := range c.Commands {
 			fmt.Println(v.Name)
 		}
+
+		return
+	}
+
+	// Check that using -version argument
+	if *showVersion == true {
+		fmt.Println("Dron version:", version)
 
 		return
 	}

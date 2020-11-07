@@ -21,6 +21,7 @@ dron <command_name>
 * `dron <command_name>` - Run specified command
 * `dron -debug <command_name>` - Run specified command with debug info
 * `dron -list` - Print list of commands name
+* `dron -version` - Print application version
 
 ## Installation
 
