@@ -179,7 +179,7 @@ func main() {
   // Check that using -list argument
   if *showList == true {
     for _, v := range c.Commands {
-      fmt.Println(v.Name)
+      println(v.Name)
     }
 
     return
@@ -187,7 +187,7 @@ func main() {
 
   // Check that using -version argument
   if *showVersion == true {
-    fmt.Println("Dron version:", version)
+    println("Dron version:", version)
 
     return
   }
@@ -203,7 +203,14 @@ func main() {
   }
 
   if fArg == "" {
-    log.Fatal("Command name not specified")
+    println("Command name not specified!")
+    println("\nAvailable commands:")
+
+    for _, v := range c.Commands {
+      println(v.Name)
+    }
+
+    return
   }
 
   commandExist := false
