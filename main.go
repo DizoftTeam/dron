@@ -17,7 +17,7 @@ import (
 const (
 	input   = "input" // Read info from user input
 	env     = "env"   // Get param from env
-	version = "1.3.1" // Application version
+	version = "1.3.2" // Application version
 )
 
 var (
@@ -158,6 +158,13 @@ func main() {
 	debugMode = *isDebug
 	// -------------------------
 
+	// Check that using -version argument
+	if *showVersion == true {
+		println("Dron version:", version)
+
+		return
+	}
+
 	c := config{}
 
 	data, err := ioutil.ReadFile("./dron.yaml")
@@ -181,13 +188,6 @@ func main() {
 		for _, v := range c.Commands {
 			println(v.Name)
 		}
-
-		return
-	}
-
-	// Check that using -version argument
-	if *showVersion == true {
-		println("Dron version:", version)
 
 		return
 	}
